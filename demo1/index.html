@@ -1,0 +1,33 @@
+<!--利用websocket建立起http连接-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>websocket</title>
+</head>
+<body>
+	<h1>Echo test</h1>
+	<input id="sendTxt" type="text" />
+	<button id="sendBtn">send</button>
+	<div id="recv"></div> 
+</body>
+	<script type="text/javascript">
+		var websocket=new WebSocket("ws://echo.websocket.org/");  //测试代码
+		var ID=document.getElementById("recv");
+		websocket.onopen=function(){
+			console.log('websocke open');
+			ID.innerHTML="Connect";
+		}
+		websocket.onclose=function(){
+			console,log("websocket close");
+		}
+		websocket.onmessage=function(e){
+			console.log(e.data);
+			ID.innerHTML+=e.data;
+		}
+		document.getElementById("sendBtn").onclick=function(){
+			var txt=document.getElementById("sendTxt").value;
+			websocket.send(txt);
+		}
+	</script>
+</html>

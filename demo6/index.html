@@ -1,0 +1,48 @@
+<!--socket建立聊天室-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>websocket</title>
+	<script type="text/javascript" src="socket.io-2.0.3.js"></script>
+</head>
+<body>
+	<h1>Chat room</h1>
+	<input id="sendTxt" type="text" />
+	<button id="sendBtn">send</button>
+</body>
+	<script type="text/javascript">
+		var socket=io("ws://localhost:3000/");    //客户端请求3000接口
+		
+		function showMessage(str,type){          //消息接收并显示
+			var div=document.createElement('div');
+			div.innerHTML=str;
+			if(type=="enter"){
+				div.style.color="blue";
+			}else if(type=="leave"){
+				div.style.color="red";
+			}
+			document.body.appendChild(div);
+		}
+		
+		//发送消息
+		document.getElementById("sendBtn").onclick=function(){ 
+			var txt=document.getElementById("sendTxt").value;
+			if(txt){
+				socket.emit('message',txt);
+			}
+		}
+
+		socket.on('enter',function(data){		//接收到用户进入
+			showMessage(data,'enter');
+		});
+
+		socket.on('message',function(data){    //接收到消息
+			showMessage(data,'message');
+		});
+		
+		socket.on('leave',function(data){     //接收到用户离开
+			showMessage(data,'leave');
+		});
+	</script>
+</html>
